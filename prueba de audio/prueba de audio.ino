@@ -14,6 +14,7 @@ mp3_set_volume(20);   //0~30
 mp3_set_EQ();   //0~5
 void mp3_single_loop(boolean state);   //set single loop
 void mp3_random_play();
+#que onda perro
 */
 void setup()
 {
