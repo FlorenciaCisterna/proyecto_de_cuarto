@@ -13,7 +13,7 @@ MPU6050 mpu;
 #define FLEX_PIN_2 A1  //   indice
 #define FLEX_PIN_3 A2  //medio
 #define FLEX_PIN_4 A3  // corazon 
-#define FLEX_PIN_5 A4  // meñique
+#define FLEX_PIN_5 A6  // meñique
 
 void setup() {
   // Inicialice la comunicación serial a una velocidad de 9600 baudios
