@@ -1,7 +1,7 @@
 import pandas as pd
 
-letters = ["A"]#,"E","I","O","U"]  # Lista de letras
-filenames = ["A.csv"]#,"E.csv","I.csv","O.csv","U.csv"]  # Archivos CSV correspondientes a cada letra
+letters = ["A","E","I","O","U"]  # Lista de letras
+filenames = ["A.csv","E.csv","I.csv","O.csv","U.csv"]  # Archivos CSV correspondientes a cada letra
 headers = ["THUMB", "INDEX", "MIDDLE", "HEART", "PINKY", "ACCELERATION", "LETTER", "PARAMETER"]
 
 output = pd.DataFrame(columns=headers)
