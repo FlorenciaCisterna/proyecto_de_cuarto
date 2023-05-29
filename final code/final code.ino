@@ -1,6 +1,11 @@
 // Incluya la biblioteca MPU6050
 #include <Wire.h>
 #include <MPU6050.h>
+#include <arduino.h>
+#include <SoftwareSerial.h>
+#include <DFPlayer_Mini_Mp3.h>
+SoftwareSerial mp3Serial(10, 11); // RX, TX
+String archivos[5] = {"0.mp3", "1.mp3", "2.mp3", "3.mp3", "4.mp3"};
 
 // Dirección I2C del MPU6050
 const uint8_t MPU_ADDR = 0x68;
@@ -24,6 +29,12 @@ void setup() {
 
   // Inicialice el MPU6050
   mpu.initialize();
+  mp3Serial.begin(9600);
+  mp3_set_volume(30);
+  delay(500);  // Espera 500 ms para que el módulo se inicialice correctamente
+  // Configura el módulo MP3-TF16P
+  enviarComandoMP3("AT+MP3INIT");  // Inicializa el módulo MP3
+  
 }
 
 void loop() {
@@ -56,4 +67,31 @@ void loop() {
   Serial.print(az);
   Serial.print("\n");
   delay(1000);
+  if (Serial.available() > 0) {
+    // Lee los datos recibidos
+    String dato = Serial.readString();
+
+    // Convierte el dato en un número entero
+    int numero = dato.toInt();
+
+    // Verifica si el número es válido
+    if (numero >= 0 && numero <= 4) {
+      // Construye el comando para reproducir el archivo de audio correspondiente
+      String comando = "AT+MP3PLAY=" + archivos[numero];
+
+      // Envía el comando al módulo MP3-TF16P
+      enviarComandoMP3(comando);
+    }
+  }
 }
+
+// Función para enviar comandos al módulo MP3-TF16P
+void enviarComandoMP3(String comando) {
+  mp3Serial.println(comando);
+  delay(100);  // Espera 100 ms para recibir la respuesta
+  while (mp3Serial.available()) {
+    String respuesta = mp3Serial.readString();
+    Serial.println(respuesta);  // Imprime la respuesta del módulo MP3-TF16P para depuración
+  }
+}
+

@@ -1,25 +1,33 @@
 import serial
 import pandas as pd
 import csv 
+path = "parameters/"
+letters = ["A", "E", "I", "O", "U"]  # Lista de letras
 
-
-path="parameters/"
 
 # Set up the serial port
-for j in range(5):
-    letter=str(input("ingrese letra: "))
-    ser = serial.Serial('COM6', 9600)  # Replace 'COM3' with the name of the serial port on your computer
-    list=[]
-    # Read data from Arduino
-    for i in range (60):
-        line = ser.readline().decode('utf-8').strip()
-        line=line.split("\t")
-        line = [int(x) for x in line]  # Convert the values to integers
-        list.append(line)
-        print(str(i),line)
-        
-    list=pd.DataFrame(list)
-    list.columns=["THUMB","INDEX","MIDDLE","HEART","PINKY","ACCELERATION"]
-    list['LETTER']=letter
-    list.to_csv(path+letter+".csv", index=False)
-    print(list)
+
+letter=str(input("ingrese letra: "))
+ser = serial.Serial('COM5', 9600)  # Replace 'COM3' with the name of the serial port on your computer
+list=[]
+file_name = path + letter + ".csv"
+letter_data = pd.read_csv(file_name)
+# Read data from Arduino
+
+for i in range (75):
+    line = ser.readline().decode('utf-8').strip()
+    line=line.split("\t")
+    line = [int(x) for x in line]  # Convert the values to integers
+    list.append(line)
+    print(str(i),line)   
+new_data = pd.DataFrame(list, columns=["THUMB", "INDEX", "MIDDLE", "HEART", "PINKY", "ACCELERATION"])
+
+# Add a new column 'LETTER' with the specified letter
+new_data['LETTER'] = letter
+
+# Concatenate the new data with the existing letter_data DataFrame
+new = pd.concat([letter_data, new_data], ignore_index=False)
+
+# Save the updated DataFrame to the CSV file
+
+new.to_csv(path+letter+".csv", index=False)

@@ -29,18 +29,26 @@ rango = pd.DataFrame(columns=headers_range)
 k=0
 j=0
 l=0
+cte=[[[0,0],[50,0],[50,0],[20,0],[20,0]],
+[[0,0],[0,0],[50,0],[0,0],[50,0]],
+[[-20,0],[0,50],[100,0],[0,0],[50,0]],
+[[-60,0],[-50,0],[0,0],[0,0],[0,0]],
+[[-50,0],[0,100],[0,0],[0,0],[0,100]]]
+
 while j<9:
     print(j)
     print(l)
+    k=0
     for col in headers[:-1]:
         mean=output[col].iloc[j]
         std=output[col].iloc[j+1]
-        min= mean-std
-        max=mean+std
+        min = mean-(std+cte[l][k][0])
+        max = mean+(std+cte[l][k][1])
         rango.loc[l,("LETTER")]=letters[l]
         rango.loc[l,("AUDIO")]=audio_name[l]
         rango.loc[l,(col+"_MIN")]=min
         rango.loc[l,(col+"_MAX")]=max
+        k=k+1
     l=l+1 
     j=j+2
     print(rango)
