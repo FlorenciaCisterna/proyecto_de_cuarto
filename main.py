@@ -37,7 +37,7 @@ letter,audio=traduccion(line,rango)
 #envio de datos al arduino
 # Abre la comunicación serial con Arduino
 #ser = serial.Serial(arduino_port, baud_rate, timeout=1)
-time.sleep(2)
+time.sleep(1)
 # Envía un número entero a Arduino
 audio=str(audio)
 ser.write(audio.encode())
