@@ -1,20 +1,21 @@
-#include <arduino.h>
-#include <SoftwareSerial.h>
-#include <DFPlayer_Mini_Mp3.h>
+#include "Arduino.h"
+#include "SoftwareSerial.h"
+#include "DFRobotDFPlayerMini.h"
 
-SoftwareSerial DFPlayerSerial(10, 11); // RX, TX
+SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
+DFRobotDFPlayerMini myDFPlayer;
+void printDetail(uint8_t type, int value);
+
 void setup()
 {
-   Serial.begin(9600);
-   DFPlayerSerial.begin(9600);
-   mp3_set_serial(DFPlayerSerial);
-   mp3_set_volume(30);
-
-   // Reproduce el archivo "0001.mp3"
-   mp3_play(1);
+  mySoftwareSerial.begin(9600);
+  Serial.begin(9600);
+  myDFPlayer.begin(mySoftwareSerial);
+  myDFPlayer.volume(30);  //Set volume value. From 0 to 30
+  myDFPlayer.play(1);  //Play the first mp3
 }
 
 void loop()
 {
-   // No es necesario agregar más código al bucle loop
+  
 }

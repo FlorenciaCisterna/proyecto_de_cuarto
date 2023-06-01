@@ -45,7 +45,7 @@ while j<9:
         min = mean-(std+cte[l][k][0])
         max = mean+(std+cte[l][k][1])
         rango.loc[l,("LETTER")]=letters[l]
-        rango.loc[l,("AUDIO")]=audio_name[l]
+        rango.loc[l,("AUDIO")]=audio_name[l+1]
         rango.loc[l,(col+"_MIN")]=min
         rango.loc[l,(col+"_MAX")]=max
         k=k+1
