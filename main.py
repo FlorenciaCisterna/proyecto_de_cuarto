@@ -25,21 +25,22 @@ def traduccion(line,rango):
 #abre el puerto serial
 
 ser = serial.Serial(arduino_port, baud_rate) 
- 
-#lee el puerto serial y clasifica su entrada y obtiene como salida la letra y su audio correspondiente
-line = ser.readline().decode('utf-8').strip()
-#line = ser.readline().decode('ascii').strip()
-line=line.split("\t")
-line = [int(x) for x in line]  # Convert the values to integers
-print(line)
-letter,audio=traduccion(line,rango)
+while True : 
+    while lectura:
+        #lee el puerto serial y clasifica su entrada y obtiene como salida la letra y su audio correspondiente
+        line = ser.readline().decode('utf-8').strip()
+        line=line.split("\t")
+        line = [int(x) for x in line]  # Convert the values to integers
+        print(line)
+        letter,audio=traduccion(line,rango)
+        #time.sleep(0.5)
+        False
 
-#envio de datos al arduino
-# Abre la comunicación serial con Arduino
-#ser = serial.Serial(arduino_port, baud_rate, timeout=1)
-time.sleep(1)
-# Envía un número entero a Arduino
-audio=str(audio)
-ser.write(audio.encode())
-ser.close()
+    #envio de datos al arduino
+    # Abre la comunicación serial con Arduino
+    #time.sleep(1)
+    # Envía un número entero a Arduino
+    audio=str(audio)
+    ser.write(audio.encode())
+    #ser.close()
 

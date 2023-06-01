@@ -8,8 +8,8 @@
 SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 void printDetail(uint8_t type, int value);
-
-const int ledPin = 12;
+const int verde = 2;
+const int rojo= 3;
 // Dirección I2C del MPU6050
 const uint8_t MPU_ADDR = 0x68;
 const char separator = ',';
@@ -33,7 +33,8 @@ void setup() {
   // Inicialice el MPU6050
   mpu.initialize();
   //inicializa audio
-  pinMode(ledPin, OUTPUT);
+  pinMode(verde, OUTPUT);
+  pinMode(rojo, OUTPUT);
   mySoftwareSerial.begin(9600);
   myDFPlayer.begin(mySoftwareSerial);
   myDFPlayer.volume(30);  //Set volume value. From 0 to 30
@@ -56,37 +57,43 @@ void loop() {
 
   // Imprima los valores en una tabla en la consola serial
   //Serial.print("pulgar\tindice\tmedio\tcorazon\tmeñique\tacelZ\n");
-
-  Serial.print(flex1);
-  Serial.print("\t");
-  Serial.print(flex2);
-  Serial.print("\t");
-  Serial.print(flex3);
-  Serial.print("\t");
-  Serial.print(flex4);
-  Serial.print("\t");
-  Serial.print(flex5);
-  Serial.print("\t");
-  Serial.print(az);
-  Serial.print("\n");
-  delay(100);
+    delay(4000);
+    Serial.print(flex1);
+    Serial.print("\t");
+    Serial.print(flex2);
+    Serial.print("\t");
+    Serial.print(flex3);
+    Serial.print("\t");
+    Serial.print(flex4);
+    Serial.print("\t");
+    Serial.print(flex5);
+    Serial.print("\t");
+    Serial.print(az);
+    Serial.print("\n");
+    delay(500);
+    
 
   if (Serial.available()>0) {
     {    
     char option=Serial.read();// Lee el número entero recibido desde Python
     
     if (option >= '1' && option <= '5') {
-      digitalWrite(ledPin, HIGH); // Enciende el LED si el número está entre 1 y 5
+      digitalWrite(verde, HIGH); 
+      delay(100);
+      digitalWrite(verde, LOW); 
       int valor = String(option).toInt();
-      myDFPlayer.play(valor); 
+      myDFPlayer.play(valor);
+      
        //Play the first mp3 
     } else {
-      digitalWrite(ledPin, LOW); // Apaga el LED si el número no está entre 1 y 5
+      digitalWrite(rojo, HIGH); // Apaga el LED si el número no está entre 1 y 5
+      delay(100);
+      digitalWrite(rojo, LOW); 
     }
   }
 }
 
 
-   }
+}
 
 

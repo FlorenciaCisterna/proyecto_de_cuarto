@@ -5,7 +5,6 @@ import numpy as np
 path = "parameters/"
 letters = ["A", "E", "I", "O", "U"]  # Lista de letras
 filenames = ["A.csv", "E.csv", "I.csv", "O.csv", "U.csv"]  # Archivos CSV correspondientes a cada letra
-audio_name=[0,1,2,3,4]
 headers = ["THUMB", "INDEX", "MIDDLE", "HEART", "PINKY", "ACCELERATION"]
 headers_range=["LETTER","AUDIO","THUMB_MIN", "THUMB_MAX","INDEX_MIN", "INDEX_MAX","MIDDLE_MIN", "MIDDLE_MAX","HEART_MIN","HEART_MAX", "PINKY_MIN","PINKY_MAX"]
 
@@ -29,11 +28,11 @@ rango = pd.DataFrame(columns=headers_range)
 k=0
 j=0
 l=0
-cte=[[[0,0],[50,0],[50,0],[20,0],[20,0]],
-[[0,0],[0,0],[50,0],[0,0],[50,0]],
-[[-20,0],[0,50],[100,0],[0,0],[50,0]],
-[[-60,0],[-50,0],[0,0],[0,0],[0,0]],
-[[-50,0],[0,100],[0,0],[0,0],[0,100]]]
+cte=[[[0,-100],[-200,0],[50,0],[20,0],[20,0]],
+[[0,0],[0,50],[50,0],[0,0],[50,0]],
+[[240,80],[0,50],[100,0],[0,0],[50,0]],
+[[59,100],[-50,15],[0,0],[0,0],[0,0]],
+[[135,150],[40,100],[0,0],[0,0],[63,200]]]#parametros minimos si el numero es positivo se resta y si es negativo se suma 
 
 while j<9:
     print(j)
@@ -45,7 +44,7 @@ while j<9:
         min = mean-(std+cte[l][k][0])
         max = mean+(std+cte[l][k][1])
         rango.loc[l,("LETTER")]=letters[l]
-        rango.loc[l,("AUDIO")]=audio_name[l+1]
+        rango.loc[l,("AUDIO")]=(l+1)
         rango.loc[l,(col+"_MIN")]=min
         rango.loc[l,(col+"_MAX")]=max
         k=k+1
