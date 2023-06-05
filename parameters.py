@@ -5,16 +5,16 @@ import numpy as np
 path = "parameters/"
 letters = ["A", "E", "I", "O", "U"]  # Lista de letras
 filenames = ["A.csv", "E.csv", "I.csv", "O.csv", "U.csv"]  # Archivos CSV correspondientes a cada letra
-headers = ["THUMB", "INDEX", "MIDDLE", "HEART", "PINKY", "ACCELERATION"]
-headers_range=["LETTER","AUDIO","THUMB_MIN", "THUMB_MAX","INDEX_MIN", "INDEX_MAX","MIDDLE_MIN", "MIDDLE_MAX","HEART_MIN","HEART_MAX", "PINKY_MIN","PINKY_MAX"]
+headers = ["THUMB", "INDEX", "MIDDLE", "HEART", "PINKY", "X","Y"]
+headers_range=["LETTER","AUDIO","THUMB_MIN", "THUMB_MAX","INDEX_MIN", "INDEX_MAX","MIDDLE_MIN", "MIDDLE_MAX","HEART_MIN","HEART_MAX", "PINKY_MIN","PINKY_MAX","X_MIN","X_MAX","Y_MIN","Y_MAX"]
 
 output = pd.DataFrame(columns=headers)
 
 for letter, filename in zip(letters, filenames):
     file_name = path + filename
     letter_data = pd.read_csv(file_name)
-    mean_values = letter_data.mean().round(0).astype(int)
-    std_values = letter_data.std().round(0).astype(int)
+    mean_values = letter_data.mean().round(0).astype(float)
+    std_values = letter_data.std().round(0).astype(float)
 
     mean_row = pd.DataFrame([[letter, "mean"] + mean_values.tolist()], columns=["LETTER", "PARAMETER"] + headers)
     std_row = pd.DataFrame([[letter, "std"] + std_values.tolist()], columns=["LETTER", "PARAMETER"] + headers)
@@ -25,24 +25,29 @@ for letter, filename in zip(letters, filenames):
 output.to_csv(path + 'data.csv', index=False)
 
 rango = pd.DataFrame(columns=headers_range)
-k=0
+
 j=0
 l=0
-cte=[[[0,-100],[-200,0],[50,0],[20,0],[20,0]],
-[[0,0],[0,50],[50,0],[0,0],[50,0]],
-[[240,80],[0,50],[100,0],[0,0],[50,0]],
-[[59,100],[-50,15],[0,0],[0,0],[0,0]],
-[[135,150],[40,100],[0,0],[0,0],[63,200]]]#parametros minimos si el numero es positivo se resta y si es negativo se suma 
+cte=[[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],#A
+[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],#E
+[[-126,0],[0,50],[0,0],[0,0],[0,0],[0,0],[0,0]],#I
+[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],#O
+[[0,0],[0,50],[0,0],[0,0],[0,0],[0,0],[0,0]]]#U
+
+
 
 while j<9:
     print(j)
     print(l)
+    
     k=0
-    for col in headers[:-1]:
+    print(k)
+    for col in headers:
+        print(col)
         mean=output[col].iloc[j]
         std=output[col].iloc[j+1]
-        min = mean-(std+cte[l][k][0])
-        max = mean+(std+cte[l][k][1])
+        min = mean-std+(cte[l][k][0])
+        max = mean+std+cte[l][k][1]
         rango.loc[l,("LETTER")]=letters[l]
         rango.loc[l,("AUDIO")]=(l+1)
         rango.loc[l,(col+"_MIN")]=min
@@ -92,4 +97,4 @@ rango.to_csv(path + 'rango.csv', index=False)
     #range = range[j].append({column_max:modified_max}, ignore_index=True)
 
 # Imprimir el DataFrame modificado
-print(rango)
+#print(rango)
