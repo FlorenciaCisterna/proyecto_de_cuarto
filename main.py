@@ -13,7 +13,7 @@ baud_rate = 9600
 
 #funcion de clasificacion de la letra 
 def traduccion(line,rango):
-    nada=0
+    nada=1
     print("entra en la fc")
     if rango.loc[0,"MIDDLE_MIN"]<=line[2] and rango.loc[1,"HEART_MIN"]<=line[3] and rango.loc[1,"PINKY_MIN"]<=line[4]: #analiza los ultimos tres dedos, si estan en contraccion entra al bucle
         print("entra en el primer if de la fc")
@@ -33,7 +33,9 @@ def traduccion(line,rango):
             elif rango.loc[2,"INDEX_MIN"]<=line[1]<=rango.loc[2,"INDEX_MAX"] and rango.loc[2,"THUMB_MIN"]<=line[0]<=rango.loc[2,"THUMB_MAX"]:
                 letter=rango.loc[2,"LETTER"]
                 audio=rango.loc[2,"AUDIO"]
-                return letter, audio   
+                return letter, audio
+            else:
+                return nada, nada    
         else:
             return nada, nada 
     else:
@@ -63,7 +65,7 @@ while True :
             line = [int(x) for x in line]
             print(line)
             letter, audio=traduccion(line,rango)
-            if letter!=0:
+            if letter!=1:
                 print(letter)
                 audio=str(audio)
                 ser.write(audio.encode())
