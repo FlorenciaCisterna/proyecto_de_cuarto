@@ -34,10 +34,7 @@ def traduccion(line,rango):
                 letter=rango.loc[2,"LETTER"]
                 audio=rango.loc[2,"AUDIO"]
                 return letter, audio
-            else:
-                return nada, nada    
-        else:
-            return nada, nada 
+    
     else:
         if  rango.loc[3,"INDEX_MIN"]<=line[1]<=rango.loc[3,"INDEX_MAX"] and line[7]<=0: 
             letter=rango.loc[3,"LETTER"]
@@ -47,8 +44,6 @@ def traduccion(line,rango):
             letter=rango.loc[4,"LETTER"]
             audio=rango.loc[4,"AUDIO"]
             return letter, audio 
-        else:
-            return nada, nada
 
 #abre el puerto serial
 
@@ -64,8 +59,9 @@ while True :
             print(line)
             line = [int(x) for x in line]
             print(line)
-            letter, audio=traduccion(line,rango)
-            if letter!=1:
+            resultado =traduccion(line,rango)
+            if resultado is not None:
+                letter,audio=resultado
                 print(letter)
                 audio=str(audio)
                 ser.write(audio.encode())
