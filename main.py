@@ -7,7 +7,7 @@ import numpy as np
 #constantes
 path=r"parameters\rango.csv"
 rango = pd.read_csv(path)
-arduino_port = 'COM8'  # Cambia esto al puerto serial correcto en tu computadora
+arduino_port = 'COM5'  # Cambia esto al puerto serial correcto en tu computadora
 baud_rate = 9600
 
 
@@ -24,7 +24,7 @@ def traduccion(line,rango):
                 letter=rango.loc[1,"LETTER"]
                 audio=rango.loc[1,"AUDIO"]
                 return letter, audio
-        elif rango.loc[0,"X_MIN"]<=line[0]<=rango.loc[0,"X_MAX"]: #si la velocidad angular es positiva
+        elif rango.loc[0,"X_MIN"] <= line[0]<=rango.loc[0,"X_MAX"]: #si la velocidad angular es positiva
             print("entra en ELIF X")
             if rango.loc[0,"INDEX_MIN"]<=line[1]<=rango.loc[0,"INDEX_MAX"] and rango.loc[0,"THUMB_MIN"]<=line[0]<=rango.loc[0,"THUMB_MAX"]:
                 letter=rango.loc[0,"LETTER"]
