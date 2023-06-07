@@ -57,7 +57,6 @@ void loop() {
   mpu.getAcceleration(&ax,&ay,&az);
   float accel_ang_x=atan(ax/sqrt(pow(ay,2) + pow(az,2)))*(180.0/3.14);
   float accel_ang_y=atan(ay/sqrt(pow(ax,2) + pow(az,2)))*(180.0/3.14);
-  float accel_ang_z = atan(sqrt(pow(ay, 2) + pow(ax, 2)) / az) * (180.0 / 3.14);
   
   // Imprima los valores en una tabla en la consola serial
   //Serial.print("pulgar\tindice\tmedio\tcorazon\tmeñique\tacelZ\n");
@@ -75,8 +74,6 @@ void loop() {
     Serial.print(accel_ang_x);
     Serial.print("\t");
     Serial.print(accel_ang_y);
-    Serial.print("\t");
-    Serial.print(accel_ang_z);
     Serial.print("\n");
     delay(500);
   
