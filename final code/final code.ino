@@ -27,10 +27,10 @@ int ax, ay, az;
 void setup() {
   // Inicialice la comunicación serial a una velocidad de 9600 baudios
   Serial.begin(9600);
-
+   
   // Inicialice la comunicación I2C
   Wire.begin();
-
+  pinMode(12, INPUT);  
   // Inicialice el MPU6050
   mpu.initialize();
   //inicializa audio
@@ -49,7 +49,8 @@ void loop() {
   int flex3 = analogRead(FLEX_PIN_3);
   int flex4 = analogRead(FLEX_PIN_4);
   int flex5 = analogRead(FLEX_PIN_5);
-
+  int pulsador=0;
+  pulsador = digitalRead(12);  
   // Lea los valores del giroscopio
   //int16_t gyroX, gyroY, gyroZ;
   int ax, ay, az;
@@ -74,9 +75,18 @@ void loop() {
     Serial.print(accel_ang_x);
     Serial.print("\t");
     Serial.print(accel_ang_y);
+    Serial.print("\t");    
+    
+    pulsador = digitalRead(12);   //lee el estado del botón
+  if(pulsador==HIGH) {          //si el estado es pulsado
+    Serial.print("1"); //se enciende el led
+  }
+  else{                                   //si el estado es no pulsado
+    Serial.print("0") ;      //se enciende el led
+  }  
     Serial.print("\n");
     delay(500);
-  
+
 
   if (Serial.available()>0) {
     {    
@@ -95,10 +105,11 @@ void loop() {
       delay(100);
       digitalWrite(rojo, LOW); 
     }
+    }
   }
 }
 
 
-}
+
 
 
