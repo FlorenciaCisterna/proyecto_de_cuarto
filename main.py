@@ -63,7 +63,7 @@ while True :
             if resultado is not None:
                 letter,audio=resultado
                 print(letter)
-                audio=str(audio)
+                
                 ser.write(audio.encode())
                 
             else:
