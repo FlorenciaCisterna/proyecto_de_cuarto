@@ -1,5 +1,8 @@
+#include <MPU6050.h>
+
 // Incluya la biblioteca MPU6050
 #include <Wire.h>
+
 #include <MPU6050.h>
 #include "Arduino.h"
 #include "SoftwareSerial.h"
@@ -30,7 +33,7 @@ void setup() {
    
   // Inicialice la comunicación I2C
   Wire.begin();
-  pinMode(12, INPUT);  
+  pinMode(12, INPUT_PULLUP);  
   // Inicialice el MPU6050
   mpu.initialize();
   //inicializa audio
@@ -79,13 +82,13 @@ void loop() {
     
     pulsador = digitalRead(12);   //lee el estado del botón
   if(pulsador==HIGH) {          //si el estado es pulsado
-    Serial.print("1"); //se enciende el led
+    Serial.print("0"); //se enciende el led
   }
   else{                                   //si el estado es no pulsado
-    Serial.print("0") ;      //se enciende el led
+    Serial.print("1") ;      //se enciende el led
   }  
     Serial.print("\n");
-    delay(500);
+    delay(50);
 
 
   if (Serial.available()>0) {

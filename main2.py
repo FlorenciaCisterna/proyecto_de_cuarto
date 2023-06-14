@@ -3,13 +3,14 @@ import pandas as pd
 import csv 
 import time 
 import numpy as np
-
 #constantes
+
 path=r"parameters\rango.csv"
-rango = pd.read_csv(path)
-arduino_port = 'COM8'  # Cambia esto al puerto serial correcto en tu computadora
+rango = pd.read_csv(path,header= 0,engine= 'python')
+arduino_port = 'COM4'  # Cambia esto al puerto serial correcto en tu computadora
 baud_rate = 9600
 
+        
 
 
 #funcion de clasificacion de la letra 
@@ -31,6 +32,8 @@ def traduccion(line,rango):
                 test[i].append(rango.loc[i,"LETTER"])
             if rango.loc[i,"Y_MIN"]<=line[6]<= rango.loc[i,"Y_MAX"]:
                 test[i].append(rango.loc[i,"LETTER"])
+           # if rango.loc[i,"BUTTON"]==line[7]:
+            #    test[i].append(rango.loc[i,"LETTER"]) 
     return test
 
 def coincidencias(lista_a,lista_b):
@@ -40,7 +43,7 @@ def coincidencias(lista_a,lista_b):
     if letra_a == "I" or letra_b=="I":
         print("reconoce la I")
         if letra_a == "E" or letra_b=="E":
-            if rango.loc[1,"THUMB_MIN"]<=line[0]<= rango.loc[1,"THUMB_MAX"] and rango.loc[1,"INDEX_MIN"]<=line[1]<= rango.loc[1,"INDEX_MAX"]:
+            if line[7]== 0:
                 letter="E"
             else: 
                 letter="I"
@@ -56,7 +59,7 @@ def coincidencias(lista_a,lista_b):
             
             return(letter)
     elif letra_a == "A" or letra_b=="A":
-        if rango.loc[1,"THUMB_MIN"]<=line[0]<= rango.loc[1,"THUMB_MAX"] and rango.loc[1,"INDEX_MIN"]<=line[1]<= rango.loc[1,"INDEX_MAX"]:
+        if line[7]== 0:
             letter="E"
         else: 
             letter="I"
@@ -107,5 +110,5 @@ while True:
                     
     except ValueError as e :
         print("Error: ",e)
-    time.sleep(1)
+    
     ser.close()
