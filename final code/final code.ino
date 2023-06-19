@@ -23,12 +23,12 @@ int ax, ay, az;
 // Pines analógicos de los sensores flex
 #define FLEX_PIN_1 A6   //  pulgar
 #define FLEX_PIN_2 A3  //   indice
-#define FLEX_PIN_3 A2  //medio
-#define FLEX_PIN_4 A1  // corazon 
-#define FLEX_PIN_5 A0  // meñique
+#define FLEX_PIN_3 A2  //   medio
+#define FLEX_PIN_4 A1  //   corazon 
+#define FLEX_PIN_5 A0  //   meñique
 
 void setup() {
-  // Inicialice la comunicación serial a una velocidad de 9600 baudios
+  // Inicia la comunicación serial a una velocidad de 9600 baudios
   Serial.begin(9600);
    
   // Inicialice la comunicación I2C
@@ -41,7 +41,7 @@ void setup() {
   pinMode(rojo, OUTPUT);
   mySoftwareSerial.begin(9600);
   myDFPlayer.begin(mySoftwareSerial);
-  myDFPlayer.volume(30);  //Set volume value. From 0 to 30
+  myDFPlayer.volume(30);  //Set volume 
   
 }
 
@@ -54,8 +54,8 @@ void loop() {
   int flex5 = analogRead(FLEX_PIN_5);
   int pulsador=0;
   pulsador = digitalRead(12);  
-  // Lea los valores del giroscopio
-  //int16_t gyroX, gyroY, gyroZ;
+  //Valores del giroscopio
+ 
   int ax, ay, az;
  
   mpu.getAcceleration(&ax,&ay,&az);
@@ -82,7 +82,7 @@ void loop() {
     
     pulsador = digitalRead(12);   //lee el estado del botón
   if(pulsador==HIGH) {          //si el estado es pulsado
-    Serial.print("0"); //se enciende el led
+    Serial.print("0");         //se enciende el led
   }
   else{                                   //si el estado es no pulsado
     Serial.print("1") ;      //se enciende el led
