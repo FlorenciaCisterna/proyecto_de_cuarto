@@ -1,19 +1,16 @@
 import serial
 import pandas as pd
-import time 
-import numpy as np
-#constantes
+import time
 
-path=r"parameters\rango.csv"
-rango = pd.read_csv(path,header= 0,engine= 'python')
-arduino_port = 'COM8'  # Cambia esto al puerto serial correcto en tu computadora
+# Definición de constantes y funciones
+
+path = r"parameters\rango.csv"
+rango = pd.read_csv(path, header=0, engine='python')
+arduino_port = 'COM8'
 baud_rate = 9600
 
-        
-
-
-#funcion de clasificacion de la letra 
-def traduccion(line,rango):
+# Función de clasificación de la letra
+def traduccion(line, rango):
     test=[[],[],[],[],[]]
     columns = rango.columns
     for i in range(len(rango.index)):
@@ -35,7 +32,7 @@ def traduccion(line,rango):
             #    test[i].append(rango.loc[i,"LETTER"]) 
     return test
 
-def coincidencias(lista_a,lista_b):
+def coincidencias(lista_a, lista_b):
     letra_a= lista_a[0]
     letra_b= lista_b[0]
     
@@ -46,7 +43,7 @@ def coincidencias(lista_a,lista_b):
                 letter="E"
             else: 
                 letter="I"
-            return letter
+            return(letter)
 
     
         elif letra_a == "U" or letra_b=="U":
@@ -62,25 +59,24 @@ def coincidencias(lista_a,lista_b):
             letter="E"
         else: 
             letter="I"
-        return letter
+    return letter
+############################################ main ##############################################################}
 
-############################################ main ###############################################################
- 
+# Configuración inicial del puerto serial
+ser = serial.Serial(arduino_port, baud_rate)
+
+# Bucle principal
 while True:
-    
     try:
-        ser = serial.Serial(arduino_port, baud_rate)
-        line = ser.readline()
-        data = line.strip().split(b',')
-        data.pop(0)
-        values = [int(val) if val.isdigit() else float(val) for val in data]
-     
-        #line = ser.readline().decode('utf-8').strip()
-        #line = line.split(",")
-        #line = [float(x) for x in values]  # Convert the values to integers
-        line = [int(x) for x in values]
+        if not ser.is_open:
+            ser.open()
+        
+        line = ser.readline().decode('utf-8').strip()
+        line = line.split(",")
+        line = [float(x) for x in line]
+        line = [int(x) for x in line]
         print(line)
-        test = traduccion(line,rango)
+        test = traduccion(line, rango)
 
         #verifica la longitud de la lista
         lista_mas_larga = max(test, key=len)
@@ -110,18 +106,17 @@ while True:
                 letter = rango.loc[rango["LETTER"] == lista_mas_larga[0]]
                 audio = rango.loc[letter.index[0], "AUDIO"]
                 print(audio)
-                audio=str(audio)
+                audio = str(audio)
+                #while ser.out_waiting > len(audio):
+                #    breakpoint()
+                #    pass  # Esperar hasta que haya suficiente espacio en el buffer de escritura
                 ser.write(audio.encode())
                 time.sleep(2)
-                ser.close()
-
             else:
                 print("No hay coincidencias, se toma nuevamente la seña")
-                ser.close()
-                    
-    except ValueError as e :
-        print("Error: ",e)
-        print(data)
-        ser.close()
-    
-    
+
+    except ValueError as e:
+        print("Error:", e)
+
+# Cierre del puerto serial al finalizar
+ser.close()
