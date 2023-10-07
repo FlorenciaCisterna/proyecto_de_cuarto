@@ -66,19 +66,19 @@ void loop() {
   //Serial.print("pulgar\tindice\tmedio\tcorazon\tmeñique\tacelZ\n");
   
     Serial.print(flex1);
-    Serial.print("\t");
+    Serial.print(",");
     Serial.print(flex2);
-    Serial.print("\t");
+    Serial.print(",");
     Serial.print(flex3);
-    Serial.print("\t");
+    Serial.print(",");
     Serial.print(flex4);
-    Serial.print("\t");
+    Serial.print(",");
     Serial.print(flex5);
-    Serial.print("\t");
+    Serial.print(",");
     Serial.print(accel_ang_x);
-    Serial.print("\t");
+    Serial.print(",");
     Serial.print(accel_ang_y);
-    Serial.print("\t");    
+    Serial.print(",");    
     
     pulsador = digitalRead(12);   //lee el estado del botón
   if(pulsador==HIGH) {          //si el estado es pulsado

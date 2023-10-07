@@ -49,11 +49,8 @@ def create_csv():
 
 
 
-def plot_csv1(name):
-    variables = ["THUMB", "INDEX", "MIDDLE", "HEART", "PINKY", "ACCEL_X", "ACCEL_Y", "ACCEL_Z"]
-    df = pd.read_csv(name, usecols=["T1", "T2", "T3"])
+def plot_csv1(df, variables):
     var = pd.DataFrame()
-
     for i in df.columns:
         for h in variables:
             column_name = f"{i}_{h}"
@@ -91,6 +88,33 @@ def plot_csv1(name):
         plt.tight_layout()
         plt.savefig("plots/"+name[:-4]+"/"+h+'.png')
 
+
+def median_plot(df,variables,name):
+    var=pd.DataFrame()
+    for i in df.columns:
+        for h in variables:
+            column_name = f"{i}_{h}"
+            var[column_name] = df[i].apply(lambda x: float(x.strip('[]').split(',')[variables.index(h)]))
+
+    for i in variables:
+           
+        columnas_de_interes = ['T1_'+i, 'T2_'+i, 'T3_'+i]
+        df_subset = var[columnas_de_interes]
+
+        # Calcular la mediana fila por fila
+        medianas = df_subset.median(axis=1)
+
+        # Crear un gráfico de barras de las medianas
+        plt.figure(figsize=(8, 4))
+        plt.plot(df.index, medianas, color='blue', alpha=0.7)
+        plt.title('Mediana para '+i+ " en " +name[:-4] )
+        plt.xticks(df.index)  # Etiquetas en el eje x para cada fila
+        plt.show()
+
 '''for i in range(6):'''    
 #create_csv()
-plot_csv1("Mi_Documento.csv")
+#plot_csv1("Mi_Documento.csv")
+name="Hospital.csv"
+df = pd.read_csv(name, usecols=["T1", "T2", "T3"])
+variables = ["THUMB", "INDEX", "MIDDLE", "HEART", "PINKY", "ACCEL_X", "ACCEL_Y", "ACCEL_Z"]
+median_plot(df, variables,name)

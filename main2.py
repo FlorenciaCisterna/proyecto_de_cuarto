@@ -6,7 +6,7 @@ import numpy as np
 
 path=r"parameters\rango.csv"
 rango = pd.read_csv(path,header= 0,engine= 'python')
-arduino_port = 'COM8'  # Cambia esto al puerto serial correcto en tu computadora
+arduino_port = 'COM5'  # Cambia esto al puerto serial correcto en tu computadora
 baud_rate = 9600
 
         
@@ -72,7 +72,11 @@ while True:
         ser = serial.Serial(arduino_port, baud_rate)
         line = ser.readline()
         data = line.strip().split(b',')
-        data.pop(0)
+        
+        data[0]= data[0].decode('utf-8', errors='ignore').strip()
+        
+        
+        #data.pop(0)
         values = [int(val) if val.isdigit() else float(val) for val in data]
      
         #line = ser.readline().decode('utf-8').strip()
@@ -80,45 +84,49 @@ while True:
         #line = [float(x) for x in values]  # Convert the values to integers
         line = [int(x) for x in values]
         print(line)
-        test = traduccion(line,rango)
+        if len(line)>0:
+                
+            test = traduccion(line,rango)
 
-        #verifica la longitud de la lista
-        lista_mas_larga = max(test, key=len)
-        longitud_lista_mas_larga = len(lista_mas_larga)
-        existe_misma_longitud = False
-        print(lista_mas_larga)
-        for sublista in test:
-            if sublista != lista_mas_larga and len(sublista) == longitud_lista_mas_larga and longitud_lista_mas_larga>=3:
-                existe_misma_longitud = True
-                print(sublista[0])
-                print(lista_mas_larga[0])
-                print(longitud_lista_mas_larga)
-                print("existen listas con la misma longitud")
-                letter= coincidencias(sublista,lista_mas_larga)
-                print(letter)
-                letter = rango.loc[rango["LETTER"] == letter]
-                audio = rango.loc[letter.index[0], "AUDIO"]
-                print(audio)
-                audio=str(audio)
-                ser.write(audio.encode())
-                time.sleep(2)
-                ser.close()
+            #verifica la longitud de la lista
+            lista_mas_larga = max(test, key=len)
+            longitud_lista_mas_larga = len(lista_mas_larga)
+            existe_misma_longitud = False
+            print(lista_mas_larga)
+            for sublista in test:
+                if sublista != lista_mas_larga and len(sublista) == longitud_lista_mas_larga and longitud_lista_mas_larga>=3:
+                    existe_misma_longitud = True
+                    print(sublista[0])
+                    print(lista_mas_larga[0])
+                    print(longitud_lista_mas_larga)
+                    print("existen listas con la misma longitud")
+                    letter= coincidencias(sublista,lista_mas_larga)
+                    print(letter)
+                    letter = rango.loc[rango["LETTER"] == letter]
+                    audio = rango.loc[letter.index[0], "AUDIO"]
+                    print(audio)
+                    audio=str(audio)
+                    ser.write(audio.encode())
+                    time.sleep(2)
+                    ser.close()
 
-        if existe_misma_longitud == False:
-            print("distintas longitudes de lista")
-            if longitud_lista_mas_larga >= 3:
-                letter = rango.loc[rango["LETTER"] == lista_mas_larga[0]]
-                audio = rango.loc[letter.index[0], "AUDIO"]
-                print(audio)
-                audio=str(audio)
-                ser.write(audio.encode())
-                time.sleep(2)
-                ser.close()
+            if existe_misma_longitud == False:
+                print("distintas longitudes de lista")
+                if longitud_lista_mas_larga >= 3:
+                    letter = rango.loc[rango["LETTER"] == lista_mas_larga[0]]
+                    audio = rango.loc[letter.index[0], "AUDIO"]
+                    print(audio)
+                    audio=str(audio)
+                    ser.write(audio.encode())
+                    time.sleep(2)
+                    ser.close()
 
-            else:
-                print("No hay coincidencias, se toma nuevamente la seña")
-                ser.close()
-                    
+                else:
+                    print("No hay coincidencias, se toma nuevamente la seña")
+                    ser.close()
+        else:
+                
+                ser.close()            
     except ValueError as e :
         print("Error: ",e)
         print(data)
